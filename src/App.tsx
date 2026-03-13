@@ -52,6 +52,7 @@ const App = () => (
           <Route path="/parent/map" element={<AwarenessMap />} />
           <Route path="/parent/sos" element={<SOSScreen />} />
           <Route path="/parent/community" element={<DonorCommunity />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

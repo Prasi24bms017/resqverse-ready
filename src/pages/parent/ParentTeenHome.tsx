@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
+import BackButton from "@/components/BackButton";
 
 const ParentTeenHome = () => {
   const navigate = useNavigate();
@@ -7,8 +8,10 @@ const ParentTeenHome = () => {
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
+        <BackButton to="/student/mode" />
+        
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 mt-8">
           <div>
             <h1 className="font-bold text-lg">Hi, Rahul! 👋</h1>
             <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full">Parent Mode</span>

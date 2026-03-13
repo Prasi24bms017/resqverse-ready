@@ -20,12 +20,3 @@ export const db = getDatabase(app);
 export const storage = getStorage(app);
 
 export default app;
-```
-
-Press **Ctrl + S** to save!
-
----
-
-Then in VS Code terminal run:
-```
-npm install firebase

@@ -1,43 +1,79 @@
 import { useState } from "react";
+import { ref, set } from "firebase/database";
+import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import BackButton from "@/components/BackButton";
 
 const KidsOnboarding = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [dob, setDob] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleStart = async () => {
+    if (!name || !dob) { setError("Please fill in both fields!"); return; }
+    setLoading(true);
+    try {
+      const kidId = `kid_${Date.now()}`;
+      await set(ref(db, `kids/${kidId}`), {
+        name,
+        dob,
+        stars: 0,
+        lessonsCompleted: 0,
+        createdAt: Date.now(),
+      });
+      localStorage.setItem("kidId", kidId);
+      localStorage.setItem("kidName", name);
+      navigate("/kids/home");
+    } catch {
+      setError("Something went wrong. Try again!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="app-container min-h-screen px-6 py-8 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-10 right-10 text-3xl animate-float" style={{ animationDelay: "0.5s" }}>⭐</div>
-      <div className="absolute top-32 left-8 text-2xl animate-float" style={{ animationDelay: "1s" }}>🌟</div>
-      <div className="absolute bottom-40 right-6 text-2xl animate-float" style={{ animationDelay: "1.5s" }}>✨</div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-purple-900 to-gray-950 px-6">
+      <BackButton />
+      <div className="text-center mb-8">
+        <div className="text-6xl mb-4">👋</div>
+        <h1 className="text-3xl font-bold text-white">Hi there!</h1>
+        <p className="text-purple-300 mt-2">Let's get you started, Safety Hero!</p>
+      </div>
 
-      <BackButton to="/student/mode" />
+      {error && (
+        <div className="bg-red-900/40 border border-red-400 text-red-300 text-sm rounded-xl p-3 mb-4 w-full max-w-sm text-center">
+          {error}
+        </div>
+      )}
 
-      <div className="mt-16 text-center">
-        <h1 className="text-3xl font-bold mb-2">Hi there! 👋</h1>
-        <p className="text-xl text-muted-foreground mb-10">What's your name?</p>
-
-        <input
-          type="text"
-          placeholder="Type your name here..."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full bg-secondary border-2 border-purple-500/30 rounded-2xl px-5 py-4 text-lg text-center text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-400 transition"
-        />
-
-        <p className="text-xl text-muted-foreground mt-8 mb-4">When's your birthday? 🎂</p>
-        <input
-          type="date"
-          className="w-full bg-secondary border-2 border-purple-500/30 rounded-2xl px-5 py-4 text-lg text-center text-foreground focus:outline-none focus:border-purple-400 transition"
-        />
-
+      <div className="w-full max-w-sm space-y-4">
+        <div>
+          <p className="text-white font-semibold mb-2 text-lg">What's your name? 🌟</p>
+          <input
+            type="text"
+            placeholder="Type your name here..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full bg-white/10 border border-purple-400 rounded-2xl px-5 py-3 text-white text-lg placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400"
+          />
+        </div>
+        <div>
+          <p className="text-white font-semibold mb-2 text-lg">When's your birthday? 🎂</p>
+          <input
+            type="date"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+            className="w-full bg-white/10 border border-purple-400 rounded-2xl px-5 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+          />
+        </div>
         <button
-          onClick={() => navigate("/kids/home")}
-          className="w-full gradient-kids-purple text-foreground font-bold text-xl py-4 rounded-2xl mt-10 hover:opacity-90 transition-all hover:scale-[1.02]"
+          onClick={handleStart}
+          disabled={loading}
+          className="w-full bg-gradient-to-r from-teal-400 to-purple-500 text-white font-bold py-4 rounded-2xl text-xl mt-4 hover:scale-105 transition disabled:opacity-50"
         >
-          Let's Go! 🚀
+          {loading ? "Setting up..." : "Let's Go! 🚀"}
         </button>
       </div>
     </div>
@@ -45,3 +81,7 @@ const KidsOnboarding = () => {
 };
 
 export default KidsOnboarding;
+
+
+
+

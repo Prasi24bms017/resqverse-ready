@@ -1,4 +1,4 @@
-import { LogOut, Users, School, CheckCircle, Award, BarChart3, AlertTriangle, Trophy, Heart } from "lucide-react";
+import { LogOut, Users, School, CheckCircle, Award, BarChart3, AlertTriangle, Trophy, Heart, Map } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 
@@ -17,6 +17,7 @@ const TeacherDashboard = () => {
     { icon: AlertTriangle, label: "Emergency Portal", emoji: "🚨", path: "/teacher/emergency" },
     { icon: Trophy, label: "School Rankings", emoji: "🏆", path: "/teacher/rankings" },
     { icon: Heart, label: "Donor Community", emoji: "💝", path: "/teacher/donor" },
+    { icon: Map, label: "Safety Map", emoji: "🗺️", path: "/teacher/map" },
   ];
 
   const drills = [

@@ -45,13 +45,51 @@ const LearningScreen = () => {
               </div>
             </>
           )}
+
           {tab === "Drills" && (
-            <div className="bg-card card-glow p-4">
-              <h3 className="font-semibold text-sm">🔥 Fire Evacuation</h3>
-              <p className="text-xs text-muted-foreground mt-1">Scenario-based drill • 60 XP</p>
-              <button className="bg-primary text-primary-foreground text-xs px-4 py-2 rounded-lg mt-3 hover:opacity-90 transition">Start Drill</button>
-            </div>
+            <>
+              {/* Disaster Ready Game Card */}
+              <div className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 border border-cyan-500/30 rounded-2xl p-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-2xl">🚨</span>
+                  <h3 className="font-bold text-sm text-cyan-400">Disaster Ready</h3>
+                  <span className="text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full">NEW</span>
+                </div>
+                <p className="text-xs text-muted-foreground mb-1">Real-time Emergency Response Game</p>
+                <p className="text-xs text-muted-foreground mb-4">🎮 Campaign Mode • ⚡ Quick Mission • 🏆 Leaderboard</p>
+                <button
+                  onClick={() => window.open("https://disas.my.canva.site/", "_blank")}
+                  className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 rounded-xl text-sm hover:scale-105 transition-transform"
+                >
+                  🚀 Play Now
+                </button>
+              </div>
+
+              {/* Fire Evacuation Drill */}
+              <div className="bg-card card-glow p-4">
+                <h3 className="font-semibold text-sm">🔥 Fire Evacuation</h3>
+                <p className="text-xs text-muted-foreground mt-1">Scenario-based drill • 60 XP</p>
+                <button className="bg-primary text-primary-foreground text-xs px-4 py-2 rounded-lg mt-3 hover:opacity-90 transition">Start Drill</button>
+              </div>
+
+              {/* Earthquake Survival Game */}
+              <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 border border-orange-500/30 rounded-2xl p-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-2xl">🌍</span>
+                  <h3 className="font-bold text-sm text-orange-400">Earthquake Survival</h3>
+                </div>
+                <p className="text-xs text-muted-foreground mb-1">Can you survive the disaster?</p>
+                <p className="text-xs text-muted-foreground mb-4">🏠 Home • 🏫 School • 🌆 City levels</p>
+                <button
+                  onClick={() => window.open("https://uppalpurva.my.canva.site/earthquake-drill", "_blank")}
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl text-sm hover:scale-105 transition-transform"
+                >
+                  🎮 Start Mission
+                </button>
+              </div>
+            </>
           )}
+
           {tab === "Scenarios" && (
             <div className="bg-card card-glow p-4">
               <h3 className="font-semibold text-sm">🌊 Flood Response</h3>

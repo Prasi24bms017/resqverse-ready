@@ -18,6 +18,37 @@ const TeacherDonor = () => {
         <BackButton to="/teacher/dashboard" />
         <h1 className="text-xl font-bold mt-4 mb-4">Donor Community 💝</h1>
 
+        {/* Solana Donation Banner */}
+        <div className="bg-gradient-to-r from-[#9945FF]/20 to-[#14F195]/20 border border-[#14F195]/30 rounded-2xl p-4 mb-5">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">⛓️</span>
+            <span className="text-xs bg-[#14F195]/20 text-[#14F195] px-2 py-0.5 rounded-full font-semibold">● VERIFIED ON-CHAIN</span>
+          </div>
+          <h3 className="font-bold text-white text-base mb-1">Disaster Relief Hub</h3>
+          <p className="text-xs text-muted-foreground mb-1">Transparent blockchain-powered donations on Solana</p>
+          <div className="grid grid-cols-3 gap-2 my-3">
+            <div className="bg-black/30 rounded-xl p-2 text-center">
+              <p className="text-sm font-bold text-[#14F195]">1.10 SOL</p>
+              <p className="text-[10px] text-muted-foreground">Total Raised</p>
+            </div>
+            <div className="bg-black/30 rounded-xl p-2 text-center">
+              <p className="text-sm font-bold text-[#14F195]">2</p>
+              <p className="text-[10px] text-muted-foreground">Donors</p>
+            </div>
+            <div className="bg-black/30 rounded-xl p-2 text-center">
+              <p className="text-sm font-bold text-[#14F195]">2</p>
+              <p className="text-[10px] text-muted-foreground">Verified TXNs</p>
+            </div>
+          </div>
+          <button
+            onClick={() => window.open("https://uppalpurva.my.canva.site/donor-community", "_blank")}
+            className="w-full bg-gradient-to-r from-[#9945FF] to-[#14F195] text-black font-bold py-3 rounded-xl text-sm hover:scale-105 transition-transform"
+          >
+            🚀 Donate with Solana
+          </button>
+          <p className="text-[10px] text-muted-foreground text-center mt-2">Every SOL counts. Help rebuild lives.</p>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 mb-5">
           <div className="bg-card card-glow p-3 text-center">
@@ -34,9 +65,18 @@ const TeacherDonor = () => {
           </div>
         </div>
 
-        <button className="w-full bg-orange-500/20 text-orange-400 font-semibold py-3 rounded-xl mb-5 hover:bg-orange-500/30 transition">
-          + Raise a Request
-        </button>
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-3 mb-5">
+          <button className="bg-orange-500/20 text-orange-400 font-semibold py-3 rounded-xl text-sm hover:bg-orange-500/30 transition">
+            + Raise a Request
+          </button>
+          <button
+            onClick={() => window.open("https://uppalpurva.my.canva.site/donor-community", "_blank")}
+            className="bg-primary text-primary-foreground font-semibold py-3 rounded-xl text-sm hover:opacity-90 transition"
+          >
+            💝 Donate via Solana
+          </button>
+        </div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-4">
@@ -64,8 +104,11 @@ const TeacherDonor = () => {
                 <span className="text-sm font-semibold text-primary">{item.amount}</span>
               </div>
               {item.type === "request" && (
-                <button className="w-full bg-primary text-primary-foreground text-xs py-2 rounded-lg mt-3 hover:opacity-90 transition">
-                  Donate Now
+                <button
+                  onClick={() => window.open("https://uppalpurva.my.canva.site/donor-community", "_blank")}
+                  className="w-full bg-primary text-primary-foreground text-xs py-2 rounded-lg mt-3 hover:opacity-90 transition"
+                >
+                  Donate Now via Solana 🔗
                 </button>
               )}
             </div>
