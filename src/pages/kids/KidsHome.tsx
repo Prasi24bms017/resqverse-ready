@@ -1,3 +1,4 @@
+import BackButton from "@/components/BackButton";
 import { useNavigate } from "react-router-dom";
 
 const KidsHome = () => {
@@ -11,13 +12,12 @@ const KidsHome = () => {
 
   return (
     <div className="app-container min-h-screen px-6 py-6">
-      {/* Header */}
-      <div className="mb-6">
+      <BackButton kids to="/student/mode" />
+      <div className="mb-6 mt-8">
         <h1 className="text-2xl font-bold">Hello, Champion! 🌟</h1>
         <p className="text-muted-foreground text-sm mt-1">Ready to be a Safety Hero today?</p>
       </div>
 
-      {/* Stars */}
       <div className="bg-card card-glow-kids p-4 mb-6 flex items-center justify-between">
         <div>
           <p className="text-sm text-muted-foreground">Your Stars</p>
@@ -32,14 +32,12 @@ const KidsHome = () => {
         </div>
       </div>
 
-      {/* Today's Lesson */}
       <div className="bg-card card-glow-kids p-4 mb-6">
         <p className="text-xs text-muted-foreground mb-1">📖 Today's Lesson</p>
         <h3 className="font-bold text-lg">What to do in an Earthquake? 🌍</h3>
         <p className="text-sm text-muted-foreground mt-1">Learn Drop, Cover & Hold!</p>
       </div>
 
-      {/* Activities */}
       <div className="space-y-4 mb-8">
         {activities.map((a) => (
           <button
@@ -62,7 +60,6 @@ const KidsHome = () => {
         ))}
       </div>
 
-      {/* Mascot */}
       <div className="text-center text-4xl animate-float">🦸‍♂️</div>
       <p className="text-center text-sm text-muted-foreground mt-2">You're doing great! Keep going!</p>
     </div>
