@@ -54,7 +54,7 @@ const Intro = () => {
       {/* Skip */}
       <div className="flex justify-end px-6 pt-6">
         <button
-          onClick={() => navigate("/role")}
+          onClick={() => navigate("/home")}
           className="text-xs text-white/60 hover:text-white transition"
         >
           Skip →
