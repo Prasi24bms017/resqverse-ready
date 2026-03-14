@@ -158,7 +158,7 @@ const AwarenessMap = () => {
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
-        <BackButton to="/parent/home" />
+        <BackButton to="/home" />
         <div className="flex items-center gap-2 mt-4 mb-4">
           <h1 className="text-xl font-bold">Safety Map 🗺️</h1>
           <span

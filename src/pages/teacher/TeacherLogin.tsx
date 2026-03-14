@@ -54,7 +54,7 @@ const TeacherLogin = () => {
 
   return (
     <div className="app-container min-h-screen px-6 py-8">
-      <BackButton to="/" />
+      <BackButton to="/home" />
       <div className="mt-8">
         <h1 className="text-2xl font-bold mb-1">Welcome, Educator 👨‍🏫</h1>
         <p className="text-muted-foreground text-sm mb-6">

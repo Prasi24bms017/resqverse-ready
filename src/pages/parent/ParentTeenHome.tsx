@@ -21,7 +21,7 @@ const ParentTeenHome = () => {
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
-        <BackButton to="/student/mode" />
+        <BackButton to="/home" />
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6 mt-8">

@@ -96,7 +96,7 @@ const Intro = () => {
       {/* CTA */}
       <div className="px-6 pb-10 space-y-3">
         <button
-          onClick={() => navigate("/role")}
+          onClick={() => navigate("/home")}
           className="w-full bg-white text-black font-bold py-4 rounded-2xl text-base hover:bg-white/90 transition"
         >
           Get Started 🚀

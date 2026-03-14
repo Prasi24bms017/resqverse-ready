@@ -14,7 +14,7 @@ const DonorCommunity = () => {
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
-        <BackButton to="/parent/home" />
+        <BackButton to="/home" />
         <div className="flex items-center gap-2 mt-4 mb-1">
           <h1 className="text-xl font-bold">Community Support 💝</h1>
         </div>

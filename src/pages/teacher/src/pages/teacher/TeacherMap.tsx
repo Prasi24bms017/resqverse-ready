@@ -43,7 +43,7 @@ const TeacherMap = () => {
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
-        <BackButton to="/teacher/dashboard" />
+        <BackButton to="/home" />
         <div className="flex items-center gap-2 mt-4 mb-4">
           <h1 className="text-xl font-bold">Safety Map 🗺️</h1>
           <span className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse" />

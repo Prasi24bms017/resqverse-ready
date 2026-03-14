@@ -15,7 +15,7 @@ const TeacherDonor = () => {
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
-        <BackButton to="/teacher/dashboard" />
+        <BackButton to="/home" />
         <h1 className="text-xl font-bold mt-4 mb-4">Donor Community 💝</h1>
 
         {/* Solana Donation Banner */}

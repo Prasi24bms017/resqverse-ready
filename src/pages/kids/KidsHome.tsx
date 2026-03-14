@@ -12,7 +12,7 @@ const KidsHome = () => {
 
   return (
     <div className="app-container min-h-screen px-6 py-6">
-      <BackButton kids to="/student/mode" />
+      <BackButton kids to="/home" />
       <div className="mb-6 mt-8">
         <h1 className="text-2xl font-bold">Hello, Champion! 🌟</h1>
         <p className="text-muted-foreground text-sm mt-1">Ready to be a Safety Hero today?</p>

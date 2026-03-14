@@ -36,7 +36,7 @@ const StudentReports = () => {
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
         <div className="flex items-center justify-between">
-          <BackButton to="/teacher/dashboard" />
+          <BackButton to="/home" />
           <button className="flex items-center gap-1.5 bg-primary text-primary-foreground text-xs px-3 py-2 rounded-lg">
             <Download size={14} /> Export PDF
           </button>

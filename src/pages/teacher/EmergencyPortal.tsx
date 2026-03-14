@@ -78,7 +78,7 @@ const EmergencyPortal = () => {
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
-        <BackButton to="/teacher/dashboard" />
+        <BackButton to="/home" />
 
         <div className="flex items-center gap-2 mt-4 mb-6">
           <h1 className="text-xl font-bold">Emergency Portal 🚨</h1>
