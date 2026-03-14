@@ -1,9 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "@/firebase";
 
 const RecordsTab = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<string | null>(null);
+
+  const requireLogin = (path: string) => {
+    if (auth.currentUser) {
+      navigate(path);
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="px-6 py-5">
@@ -15,12 +24,32 @@ const RecordsTab = () => {
       {!selected && (
         <div className="space-y-3">
           {[
-            { id: "student", emoji: "🧑‍🎓", title: "My Progress", desc: "View your learning progress and badges", color: "from-purple-900/40 to-pink-900/40", border: "border-purple-500/30" },
-            { id: "teacher", emoji: "👨‍🏫", title: "School Records", desc: "Student reports, rankings and drills", color: "from-blue-900/40 to-indigo-900/40", border: "border-blue-500/30" },
+            {
+              id: "student",
+              emoji: "🧑‍🎓",
+              title: "My Progress",
+              desc: "View your learning progress and badges",
+              color: "from-purple-900/40 to-pink-900/40",
+              border: "border-purple-500/30",
+            },
+            {
+              id: "teacher",
+              emoji: "👨‍🏫",
+              title: "School Records",
+              desc: "Student reports, rankings and drills",
+              color: "from-blue-900/40 to-indigo-900/40",
+              border: "border-blue-500/30",
+            },
           ].map((r) => (
             <button
               key={r.id}
-              onClick={() => setSelected(r.id)}
+              onClick={() => {
+                if (r.id === "teacher" && !auth.currentUser) {
+                  navigate("/login");
+                } else {
+                  setSelected(r.id);
+                }
+              }}
               className={`w-full bg-gradient-to-br ${r.color} border ${r.border} rounded-2xl p-4 flex items-center gap-4 hover:scale-[1.02] transition-transform text-left`}
             >
               <span className="text-4xl">{r.emoji}</span>
@@ -37,7 +66,12 @@ const RecordsTab = () => {
       {/* Student Records */}
       {selected === "student" && (
         <div>
-          <button onClick={() => setSelected(null)} className="text-xs text-muted-foreground mb-4">← Back</button>
+          <button
+            onClick={() => setSelected(null)}
+            className="text-xs text-muted-foreground mb-4 flex items-center gap-1"
+          >
+            ← Back
+          </button>
           <h3 className="font-bold text-lg mb-4">🧑‍🎓 My Progress</h3>
 
           <div className="grid grid-cols-3 gap-3 mb-6">
@@ -65,7 +99,9 @@ const RecordsTab = () => {
           <h3 className="font-semibold mb-3">Badges Earned 🏅</h3>
           <div className="grid grid-cols-2 gap-2 mb-6">
             {["🔥 Fire Expert", "🌍 Earthquake Pro", "🌊 Flood Ready", "⚡ Storm Safe"].map((b) => (
-              <div key={b} className="bg-card card-glow p-3 text-center text-sm rounded-2xl">{b}</div>
+              <div key={b} className="bg-card card-glow p-3 text-center text-sm rounded-2xl">
+                {b}
+              </div>
             ))}
           </div>
 
@@ -76,7 +112,10 @@ const RecordsTab = () => {
               { name: "Meera S.", score: 2650, emoji: "🥈" },
               { name: "Rohit P.", score: 2400, emoji: "🥉" },
             ].map((l) => (
-              <div key={l.name} className="bg-card card-glow p-3 flex items-center justify-between rounded-2xl">
+              <div
+                key={l.name}
+                className="bg-card card-glow p-3 flex items-center justify-between rounded-2xl"
+              >
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{l.emoji}</span>
                   <span className="text-sm font-medium">{l.name}</span>
@@ -91,7 +130,12 @@ const RecordsTab = () => {
       {/* Teacher Records */}
       {selected === "teacher" && (
         <div>
-          <button onClick={() => setSelected(null)} className="text-xs text-muted-foreground mb-4">← Back</button>
+          <button
+            onClick={() => setSelected(null)}
+            className="text-xs text-muted-foreground mb-4 flex items-center gap-1"
+          >
+            ← Back
+          </button>
           <h3 className="font-bold text-lg mb-4">👨‍🏫 School Records</h3>
           <div className="space-y-3">
             {[
@@ -102,7 +146,7 @@ const RecordsTab = () => {
             ].map((item) => (
               <button
                 key={item.label}
-                onClick={() => navigate(item.path)}
+                onClick={() => requireLogin(item.path)}
                 className="w-full bg-card card-glow p-4 flex items-center gap-4 hover:bg-secondary transition rounded-2xl text-left"
               >
                 <span className="text-3xl">{item.emoji}</span>

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "@/firebase";
 import LearningTab from "@/components/tabs/LearningTab";
 import CommunityTab from "@/components/tabs/CommunityTab";
 import MapTab from "@/components/tabs/MapTab";
@@ -16,6 +17,19 @@ const Home = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("learning");
   const [sosPressed, setSosPressed] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        const fullName = user.displayName || user.email || "Friend";
+        setUserName(fullName.split(" ")[0].split("@")[0]);
+      } else {
+        setUserName(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleSOS = () => {
     setSosPressed(true);
@@ -31,24 +45,46 @@ const Home = () => {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-sm">
             🛡️
           </div>
-          <span className="font-bold text-base">ResQverse</span>
+          <div>
+            <span className="font-bold text-base">ResQverse</span>
+            {userName && (
+              <p className="text-[10px] text-muted-foreground">Hi, {userName}! 👋</p>
+            )}
+          </div>
         </div>
 
-        {/* SOS Button — top right, always visible */}
-        <button
-          onClick={handleSOS}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-black text-sm transition-all ${
-            sosPressed
-              ? "bg-yellow-500 scale-95"
-              : "bg-red-600 hover:bg-red-500 animate-pulse"
-          }`}
-          style={{
-            boxShadow: "0 0 0 3px rgba(220,38,38,0.3)",
-          }}
-        >
-          <span>🚨</span>
-          <span className="text-white">SOS</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Login/Logout Button */}
+          {userName ? (
+            <button
+              onClick={() => { auth.signOut(); navigate("/"); }}
+              className="text-xs text-muted-foreground hover:text-foreground transition bg-secondary px-3 py-1.5 rounded-lg"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="text-xs bg-primary text-primary-foreground px-3 py-1.5 rounded-lg font-semibold"
+            >
+              Login
+            </button>
+          )}
+
+          {/* SOS Button */}
+          <button
+            onClick={handleSOS}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-black text-sm transition-all ${
+              sosPressed
+                ? "bg-yellow-500 scale-95"
+                : "bg-red-600 hover:bg-red-500 animate-pulse"
+            }`}
+            style={{ boxShadow: "0 0 0 3px rgba(220,38,38,0.3)" }}
+          >
+            <span>🚨</span>
+            <span className="text-white">SOS</span>
+          </button>
+        </div>
       </div>
 
       {/* Tab Content */}

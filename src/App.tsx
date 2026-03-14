@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Intro from "./pages/Intro";
-import RoleSelection from "./pages/RoleSelection";
 import Home from "./pages/Home";
+import Login from "./pages/src/pages/Login";
 import SOSPage from "./pages/SOSPage";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -20,10 +20,9 @@ import KidsHome from "./pages/kids/KidsHome";
 import KidsRhymes from "./pages/kids/KidsRhymes";
 import KidsMatching from "./pages/kids/KidsMatching";
 import KidsDrills from "./pages/kids/KidsDrills";
-import ParentTeenLogin from "./pages/parent/ParentTeenLogin";
-import ParentTeenHome from "./pages/parent/ParentTeenHome";
 import LearningScreen from "./pages/parent/LearningScreen";
 import AwarenessMap from "./pages/parent/AwarenessMap";
+import SOSScreen from "./pages/parent/SOSScreen";
 import DonorCommunity from "./pages/parent/DonorCommunity";
 import NotFound from "./pages/NotFound";
 
@@ -35,10 +34,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* New Flow */}
+          {/* Main Flow */}
           <Route path="/" element={<Intro />} />
-          <Route path="/role" element={<RoleSelection />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/sos" element={<SOSPage />} />
 
           {/* Admin */}
@@ -61,12 +60,10 @@ const App = () => (
           <Route path="/kids/matching" element={<KidsMatching />} />
           <Route path="/kids/drills" element={<KidsDrills />} />
 
-          {/* Parent/Teen */}
-          <Route path="/parent/login" element={<ParentTeenLogin />} />
-          <Route path="/parent/home" element={<ParentTeenHome />} />
+          {/* Learning + Map + Community */}
           <Route path="/parent/learn" element={<LearningScreen />} />
           <Route path="/parent/map" element={<AwarenessMap />} />
-          <Route path="/parent/sos" element={<SOSPage />} />
+          <Route path="/parent/sos" element={<SOSScreen />} />
           <Route path="/parent/community" element={<DonorCommunity />} />
 
           <Route path="*" element={<NotFound />} />
