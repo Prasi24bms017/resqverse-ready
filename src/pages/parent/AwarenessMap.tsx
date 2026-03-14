@@ -5,7 +5,6 @@ import "leaflet/dist/leaflet.css";
 import BackButton from "@/components/BackButton";
 import BottomNav from "@/components/BottomNav";
 
-// Fix Leaflet default icon issue in React
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -13,9 +12,8 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-const filters = ["All", "Hospitals", "Shelters", "Water", "Police"];
+const filters = ["All", "Hospitals", "Schools", "Police"];
 
-// Custom colored icons
 const createIcon = (color: string, emoji: string) =>
   L.divIcon({
     html: `<div style="background:${color};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.4)">${emoji}</div>`,
@@ -25,24 +23,51 @@ const createIcon = (color: string, emoji: string) =>
   });
 
 const youIcon = L.divIcon({
-  html: `<div style="background:#3b82f6;width:20px;height:20px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 4px rgba(59,130,246,0.3),0 2px 8px rgba(0,0,0,0.4);animation:pulse 2s infinite"></div>`,
+  html: `<div style="background:#3b82f6;width:20px;height:20px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 4px rgba(59,130,246,0.3),0 2px 8px rgba(0,0,0,0.4)"></div>`,
   className: "",
   iconSize: [20, 20],
   iconAnchor: [10, 10],
 });
 
-// Component to set map view to user location
 const LocationSetter = ({ position }: { position: [number, number] }) => {
   const map = useMap();
   useEffect(() => { map.setView(position, 14); }, [position]);
   return null;
 };
 
+interface Place {
+  id: number;
+  lat: number;
+  lon: number;
+  tags: { name?: string; amenity?: string };
+  type: string;
+  emoji: string;
+  color: string;
+  dist: string;
+}
+
+const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  return d < 1 ? `${(d * 1000).toFixed(0)}m` : `${d.toFixed(1)}km`;
+};
+
 const AwarenessMap = () => {
   const [filter, setFilter] = useState("All");
-  const [userPos, setUserPos] = useState<[number, number]>([30.9010, 75.8573]); // Default: Ludhiana
+  const [userPos, setUserPos] = useState<[number, number]>([30.901, 75.8573]);
   const [locationName, setLocationName] = useState("Detecting location...");
   const [locating, setLocating] = useState(true);
+  const [places, setPlaces] = useState<Place[]>([]);
+  const [loadingPlaces, setLoadingPlaces] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -63,12 +88,72 @@ const AwarenessMap = () => {
     }
   }, []);
 
-  // Nearby locations relative to user position
-  const nearbyLocations = [
-    { emoji: "🏥", name: "Civil Hospital", dist: "1.2km", info: "Open 24/7", offset: [0.008, 0.01] as [number, number] },
-    { emoji: "🏫", name: "School Shelter", dist: "0.8km", info: "Capacity 500", offset: [-0.005, 0.007] as [number, number] },
-    { emoji: "💧", name: "Water Point", dist: "0.5km", info: "Active", offset: [0.003, -0.006] as [number, number] },
-  ];
+  // Fetch real nearby places from Overpass API
+  useEffect(() => {
+    if (locating) return;
+    const fetchPlaces = async () => {
+      setLoadingPlaces(true);
+      const [lat, lon] = userPos;
+      const radius = 3000;
+      const query = `
+        [out:json][timeout:25];
+        (
+          node["amenity"="hospital"](around:${radius},${lat},${lon});
+          node["amenity"="clinic"](around:${radius},${lat},${lon});
+          node["amenity"="school"](around:${radius},${lat},${lon});
+          node["amenity"="police"](around:${radius},${lat},${lon});
+        );
+        out body;
+      `;
+      try {
+        const res = await fetch("https://overpass-api.de/api/interpreter", {
+          method: "POST",
+          body: query,
+        });
+        const data = await res.json();
+        const mapped: Place[] = data.elements
+          .filter((el: any) => el.lat && el.lon)
+          .slice(0, 20)
+          .map((el: any) => {
+            const amenity = el.tags?.amenity;
+            let emoji = "📍";
+            let color = "#6b7280";
+            let type = "Other";
+            if (amenity === "hospital" || amenity === "clinic") {
+              emoji = "🏥"; color = "#3b82f6"; type = "Hospitals";
+            } else if (amenity === "school") {
+              emoji = "🏫"; color = "#8b5cf6"; type = "Schools";
+            } else if (amenity === "police") {
+              emoji = "🚔"; color = "#f59e0b"; type = "Police";
+            }
+            return {
+              id: el.id,
+              lat: el.lat,
+              lon: el.lon,
+              tags: el.tags,
+              type,
+              emoji,
+              color,
+              dist: getDistance(lat, lon, el.lat, el.lon),
+            };
+          });
+        setPlaces(mapped);
+      } catch (e) {
+        console.error("Overpass API error", e);
+      } finally {
+        setLoadingPlaces(false);
+      }
+    };
+    fetchPlaces();
+  }, [locating, userPos]);
+
+  const filteredPlaces = places.filter(
+    (p) => filter === "All" || p.type === filter
+  );
+
+  const openRoute = (lat: number, lon: number) => {
+    window.open(`https://maps.google.com/?daddr=${lat},${lon}`, "_blank");
+  };
 
   return (
     <div className="app-container min-h-screen pb-24">
@@ -76,12 +161,19 @@ const AwarenessMap = () => {
         <BackButton to="/parent/home" />
         <div className="flex items-center gap-2 mt-4 mb-4">
           <h1 className="text-xl font-bold">Safety Map 🗺️</h1>
-          <span className={`w-2.5 h-2.5 rounded-full ${locating ? "bg-yellow-400" : "bg-green-400"} animate-pulse`} />
+          <span
+            className={`w-2.5 h-2.5 rounded-full ${
+              locating ? "bg-yellow-400" : "bg-green-400"
+            } animate-pulse`}
+          />
           <span className="text-xs text-muted-foreground">{locationName}</span>
         </div>
 
-        {/* Real Leaflet Map */}
-        <div className="rounded-2xl overflow-hidden border border-border mb-4" style={{ height: "300px" }}>
+        {/* Map */}
+        <div
+          className="rounded-2xl overflow-hidden border border-border mb-4"
+          style={{ height: "320px" }}
+        >
           <MapContainer
             center={userPos}
             zoom={14}
@@ -92,42 +184,36 @@ const AwarenessMap = () => {
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <LocationSetter position={userPos} />
 
-            {/* User location */}
+            {/* User */}
             <Marker position={userPos} icon={youIcon}>
               <Popup>📍 You are here</Popup>
             </Marker>
 
-            {/* Danger zone circle */}
+            {/* Danger zone */}
             <Circle
               center={[userPos[0] + 0.012, userPos[1] - 0.015]}
               radius={400}
               pathOptions={{ color: "#ef4444", fillColor: "#ef4444", fillOpacity: 0.2 }}
             />
-            <Marker position={[userPos[0] + 0.012, userPos[1] - 0.015]} icon={createIcon("#ef4444", "⚠️")}>
+            <Marker
+              position={[userPos[0] + 0.012, userPos[1] - 0.015]}
+              icon={createIcon("#ef4444", "⚠️")}
+            >
               <Popup>🔴 Flood Zone — Active Warning</Popup>
             </Marker>
 
-            {/* Safe shelter */}
-            <Circle
-              center={[userPos[0] - 0.008, userPos[1] + 0.012]}
-              radius={300}
-              pathOptions={{ color: "#22c55e", fillColor: "#22c55e", fillOpacity: 0.2 }}
-            />
-            <Marker position={[userPos[0] - 0.008, userPos[1] + 0.012]} icon={createIcon("#22c55e", "✅")}>
-              <Popup>🟢 Safe Shelter — Capacity 500</Popup>
-            </Marker>
-
-            {/* Nearby locations */}
-            {nearbyLocations.map((loc) => (
+            {/* Real places from Overpass */}
+            {filteredPlaces.map((p) => (
               <Marker
-                key={loc.name}
-                position={[userPos[0] + loc.offset[0], userPos[1] + loc.offset[1]]}
-                icon={createIcon(
-                  loc.emoji === "🏥" ? "#3b82f6" : loc.emoji === "🏫" ? "#8b5cf6" : "#06b6d4",
-                  loc.emoji
-                )}
+                key={p.id}
+                position={[p.lat, p.lon]}
+                icon={createIcon(p.color, p.emoji)}
               >
-                <Popup>{loc.name} — {loc.dist} — {loc.info}</Popup>
+                <Popup>
+                  <strong>{p.tags.name || p.type}</strong>
+                  <br />
+                  {p.emoji} {p.dist} away
+                </Popup>
               </Marker>
             ))}
           </MapContainer>
@@ -135,7 +221,11 @@ const AwarenessMap = () => {
 
         {/* Legend */}
         <div className="flex flex-wrap gap-3 mb-4 text-xs text-muted-foreground">
-          <span>🔴 Danger</span><span>🟢 Safe</span><span>🔵 You</span><span>🟣 Shelter</span><span>🩵 Water</span>
+          <span>🔴 Danger</span>
+          <span>🔵 You</span>
+          <span>🏥 Hospital</span>
+          <span>🏫 School</span>
+          <span>🚔 Police</span>
         </div>
 
         {/* Filter */}
@@ -145,7 +235,9 @@ const AwarenessMap = () => {
               key={f}
               onClick={() => setFilter(f)}
               className={`text-xs px-3 py-1.5 rounded-full whitespace-nowrap transition ${
-                filter === f ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+                filter === f
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-muted-foreground"
               }`}
             >
               {f}
@@ -153,23 +245,49 @@ const AwarenessMap = () => {
           ))}
         </div>
 
-        {/* Nearby Locations */}
-        <h2 className="font-semibold mb-3">Nearby Safe Locations</h2>
+        {/* Nearby List */}
+        <h2 className="font-semibold mb-3">
+          Nearby Places {loadingPlaces && "⏳"}
+          {!loadingPlaces && `(${filteredPlaces.length} found)`}
+        </h2>
+
+        {loadingPlaces && (
+          <div className="text-center text-sm text-muted-foreground py-6">
+            Loading real nearby locations...
+          </div>
+        )}
+
         <div className="space-y-3 mb-6">
-          {nearbyLocations.map((l) => (
-            <div key={l.name} className="bg-card card-glow p-4 flex items-center justify-between">
+          {filteredPlaces.slice(0, 8).map((p) => (
+            <div
+              key={p.id}
+              className="bg-card card-glow p-4 flex items-center justify-between"
+            >
               <div className="flex items-center gap-3">
-                <span className="text-xl">{l.emoji}</span>
+                <span className="text-xl">{p.emoji}</span>
                 <div>
-                  <p className="text-sm font-medium">{l.name}</p>
-                  <p className="text-xs text-muted-foreground">{l.dist} • {l.info}</p>
+                  <p className="text-sm font-medium">
+                    {p.tags.name || p.type}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {p.dist} away
+                  </p>
                 </div>
               </div>
-              <button className="bg-primary text-primary-foreground text-xs px-3 py-1.5 rounded-lg">
+              <button
+                onClick={() => openRoute(p.lat, p.lon)}
+                className="bg-primary text-primary-foreground text-xs px-3 py-1.5 rounded-lg"
+              >
                 Get Route
               </button>
             </div>
           ))}
+
+          {!loadingPlaces && filteredPlaces.length === 0 && (
+            <div className="text-center text-sm text-muted-foreground py-6">
+              No places found nearby. Try a different filter.
+            </div>
+          )}
         </div>
 
         {/* Active Alerts */}
