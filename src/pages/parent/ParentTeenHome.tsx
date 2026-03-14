@@ -1,27 +1,44 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "@/firebase";
 import BottomNav from "@/components/BottomNav";
 import BackButton from "@/components/BackButton";
 
 const ParentTeenHome = () => {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("Friend");
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      // Get first name only
+      const fullName = user.displayName || user.email || "Friend";
+      const firstName = fullName.split(" ")[0].split("@")[0];
+      setUserName(firstName);
+    }
+  }, []);
 
   return (
     <div className="app-container min-h-screen pb-24">
       <div className="px-6 py-5">
         <BackButton to="/student/mode" />
-        
+
         {/* Header */}
         <div className="flex items-center justify-between mb-6 mt-8">
           <div>
-            <h1 className="font-bold text-lg">Hi, Rahul! 👋</h1>
-            <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full">Parent Mode</span>
+            <h1 className="font-bold text-lg">Hi, {userName}! 👋</h1>
+            <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full">
+              Parent Mode
+            </span>
           </div>
         </div>
 
         {/* Daily Tip */}
         <div className="bg-primary/10 border border-primary/20 rounded-2xl p-4 mb-6">
           <p className="text-xs text-primary mb-1">💡 Daily Safety Tip</p>
-          <p className="text-sm">Keep an emergency kit with water, flashlight, and first-aid supplies near your door.</p>
+          <p className="text-sm">
+            Keep an emergency kit with water, flashlight, and first-aid supplies near your door.
+          </p>
         </div>
 
         {/* Quick Stats */}
@@ -41,7 +58,10 @@ const ParentTeenHome = () => {
         </div>
 
         {/* Continue Learning */}
-        <button onClick={() => navigate("/parent/learn")} className="w-full bg-card card-glow p-4 text-left mb-4">
+        <button
+          onClick={() => navigate("/parent/learn")}
+          className="w-full bg-card card-glow p-4 text-left mb-4"
+        >
           <p className="text-xs text-muted-foreground mb-1">📖 Continue Learning</p>
           <h3 className="font-semibold">Flood Safety Module</h3>
           <div className="w-full bg-secondary rounded-full h-2 mt-2">
