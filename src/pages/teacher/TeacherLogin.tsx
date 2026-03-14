@@ -30,7 +30,7 @@ const TeacherLogin = () => {
           displayName: form.name,
         });
       }
-      navigate("/teacher/dashboard");
+      navigate("/home");
     } catch (err: any) {
       setError(err.message.replace("Firebase: ", "").replace(/\(auth.*\)/, ""));
     } finally {
@@ -44,7 +44,7 @@ const TeacherLogin = () => {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      navigate("/teacher/dashboard");
+      navigate("/home");
     } catch (err: any) {
       setError(err.message.replace("Firebase: ", "").replace(/\(auth.*\)/, ""));
     } finally {

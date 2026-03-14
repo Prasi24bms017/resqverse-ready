@@ -31,7 +31,7 @@ const ParentTeenLogin = () => {
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
-      navigate("/parent/home");
+      navigate("/home");
     } catch (err: any) {
       setError(getFirebaseError(err.code));
     } finally {
@@ -51,7 +51,7 @@ const ParentTeenLogin = () => {
         role,
         createdAt: Date.now(),
       });
-      navigate("/parent/home");
+      navigate("/home");
     } catch (err: any) {
       setError(getFirebaseError(err.code));
     } finally {

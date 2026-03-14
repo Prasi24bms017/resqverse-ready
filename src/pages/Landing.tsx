@@ -34,7 +34,7 @@ const Landing = () => {
           </button>
 
           <button
-            onClick={() => navigate("/student/mode")}
+            onClick={() => navigate("/home")}
             className="gradient-teacher-teal card-glow p-5 text-left group"
           >
             <span className="text-3xl mb-3 block">👨‍👩‍👧</span>

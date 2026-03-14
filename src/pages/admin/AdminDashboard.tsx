@@ -13,7 +13,7 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("resqverse_admin");
-    navigate("/");
+    navigate("/home");
   };
 
   const stats = [
