@@ -1,9 +1,21 @@
+import { useEffect, useState } from "react";
 import { LogOut, Users, School, CheckCircle, Award, BarChart3, AlertTriangle, Trophy, Heart, Map } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "@/firebase";
 import BottomNav from "@/components/BottomNav";
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("Teacher");
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      const fullName = user.displayName || user.email || "Teacher";
+      const firstName = fullName.split(" ")[0].split("@")[0];
+      setUserName(firstName);
+    }
+  }, []);
 
   const stats = [
     { icon: Users, label: "Total Students", value: "142", emoji: "👥" },
@@ -33,15 +45,23 @@ const TeacherDashboard = () => {
     { name: "Meera Joshi", action: "scored 95% in Quiz", time: "3 hrs ago" },
   ];
 
+  const handleLogout = async () => {
+    await auth.signOut();
+    navigate("/");
+  };
+
   return (
     <div className="app-container min-h-screen pb-24">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-border">
         <div>
-          <h1 className="font-bold text-lg">Ms. Kavitha Nair</h1>
-          <p className="text-xs text-muted-foreground">Delhi Public School, Ludhiana</p>
+          <h1 className="font-bold text-lg">Hi, {userName}! 👋</h1>
+          <p className="text-xs text-muted-foreground">Teacher Dashboard</p>
         </div>
-        <button onClick={() => navigate("/")} className="text-muted-foreground hover:text-foreground transition">
+        <button
+          onClick={handleLogout}
+          className="text-muted-foreground hover:text-foreground transition"
+        >
           <LogOut size={20} />
         </button>
       </div>
@@ -96,11 +116,18 @@ const TeacherDashboard = () => {
           <h2 className="font-semibold mb-3">Recent Activity</h2>
           <div className="space-y-2">
             {recentActivity.map((a, i) => (
-              <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
+              <div
+                key={i}
+                className="flex items-center justify-between py-2 border-b border-border/50 last:border-0"
+              >
                 <div>
-                  <p className="text-sm"><span className="font-medium">{a.name}</span> {a.action}</p>
+                  <p className="text-sm">
+                    <span className="font-medium">{a.name}</span> {a.action}
+                  </p>
                 </div>
-                <span className="text-xs text-muted-foreground whitespace-nowrap ml-3">{a.time}</span>
+                <span className="text-xs text-muted-foreground whitespace-nowrap ml-3">
+                  {a.time}
+                </span>
               </div>
             ))}
           </div>
