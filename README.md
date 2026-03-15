@@ -1,73 +1,162 @@
-# Welcome to your Lovable project
+# 🛡️ ResQverse — Prepare Today. Protect Tomorrow.
 
-## Project info
+India's first gamified disaster preparedness platform built for schools, students and communities.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🌐 Live Demo
+**[resqverse-ready.vercel.app](https://resqverse-ready.vercel.app)**
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📱 What is ResQverse?
 
-**Use Lovable**
+ResQverse is a disaster preparedness platform that trains students through games, helps teachers manage emergencies, enables transparent blockchain donations, and provides real-time safety maps — all in one app.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Every year India faces 100+ disasters — floods, earthquakes, fires. But schools have NO system to:
+- Train students before disasters happen
+- Manage emergencies when they occur
+- Connect affected families with donors
+- Share real-time safety information
 
-Changes made via Lovable will be committed automatically to this repo.
+ResQverse solves all of this.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## ✨ Key Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 📚 Gamified Learning
+- Earthquake Survival Game — survive home, school and city level disasters
+- Disaster Ready — real-time emergency response game with campaign mode and leaderboard
+- Interactive Quizzes with XP scoring — Earthquake Safety, Flood Awareness, First Aid Basics
+- Safety Rhymes for young kids with YouTube video integration
+- Scenario-based drills for teens
 
-Follow these steps:
+### 🗺️ Real-Time Safety Map
+- Live GPS location detection
+- Real nearby hospitals, police stations and schools fetched live via Overpass API
+- Danger zones marked in red, safe shelters in green
+- One tap Google Maps directions to any location
+- Active disaster alerts from IMD and NDMA
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 🚨 One-Tap SOS Emergency
+- Instant emergency alert with one tap — no login required
+- Real GPS coordinates shared automatically
+- Direct call buttons — Police 100, Ambulance 108, Fire 101, NDMA 1078
+- Mark yourself as available to help others nearby
+- Works on any device, any browser, even on slow internet
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### ⛓️ Blockchain Donations
+- Powered by Solana blockchain
+- Every donation transaction verified on-chain
+- Fully transparent — no middlemen, no corruption
+- Donors can see exactly where their money went
+- Public transaction history available
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 👨‍🏫 Teacher Dashboard
+- Monitor student progress and quiz scores
+- School rankings across the district
+- Interschool drill scheduling and management
+- Emergency portal to send school-wide alerts instantly
+- Donor community management
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### 🔐 Admin Panel
+- Monitor all Solana transactions
+- View all registered users
+- App usage analytics
+- SOS alert history and status
+- Accessible only via secret URL
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| Frontend | React + Vite + TypeScript |
+| Styling | TailwindCSS |
+| Authentication | Firebase Auth (Google + Email) |
+| Database | Firebase Realtime Database |
+| Maps | Leaflet.js + OpenStreetMap |
+| Real Places Data | Overpass API |
+| Blockchain | Solana Network |
+| Deployment | Vercel |
+| Version Control | GitHub |
+
+---
+
+## 👥 User Roles
+
+| Role | Access |
+|------|--------|
+| 👦 Kids | Safety Rhymes, Matching Game, Earthquake Drill Game |
+| 🧑‍🎓 Teen | Quizzes, Disaster Ready Game, Scenarios |
+| 👨‍🏫 Teacher | Dashboard, Student Reports, Emergency Portal, Drills |
+| 👨‍👧 Parent | Safety Map, SOS, Blockchain Donations, Learning |
+| 🔐 Admin | All Transactions, User Analytics, SOS History |
+
+---
+
+## 📁 Project Structure
+```
+src/
+├── pages/
+│   ├── Intro.tsx               # Welcome/onboarding screen
+│   ├── Home.tsx                # Main app with 4 tabs
+│   ├── Login.tsx               # Firebase auth login
+│   ├── SOSPage.tsx             # Emergency SOS screen
+│   ├── admin/
+│   │   ├── AdminLogin.tsx      # Secret admin login
+│   │   └── AdminDashboard.tsx  # Admin control panel
+│   ├── teacher/
+│   │   ├── TeacherLogin.tsx
+│   │   ├── TeacherDashboard.tsx
+│   │   ├── StudentReports.tsx
+│   │   ├── SchoolRankings.tsx
+│   │   ├── InterschoolDrills.tsx
+│   │   ├── EmergencyPortal.tsx
+│   │   └── TeacherDonor.tsx
+│   ├── parent/
+│   │   ├── LearningScreen.tsx
+│   │   ├── AwarenessMap.tsx
+│   │   ├── SOSScreen.tsx
+│   │   └── DonorCommunity.tsx
+│   └── kids/
+│       ├── KidsOnboarding.tsx
+│       ├── KidsHome.tsx
+│       ├── KidsRhymes.tsx
+│       ├── KidsMatching.tsx
+│       └── KidsDrills.tsx
+├── components/
+│   ├── tabs/
+│   │   ├── LearningTab.tsx     # Learn section
+│   │   ├── CommunityTab.tsx    # Donor community
+│   │   ├── MapTab.tsx          # Safety map
+│   │   └── RecordsTab.tsx      # Progress records
+│   ├── SOSButton.tsx           # Floating SOS button
+│   └── BackButton.tsx          # Navigation back button
+└── firebase.ts                 # Firebase configuration
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🎯 App Flow
+```
+Intro Screen (what ResQverse does)
+        ↓
+Home Screen (4 tabs)
+📚 Learn | 💝 Community | 🗺️ Map | 📊 Records
+        +
+🚨 SOS button (always visible, no login needed)
+        ↓
+Inside each tab — user selects their purpose
+```
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🔮 Future Scope
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- 📱 Convert to React Native mobile app
+- 📡 Offline Bluetooth mesh networking for no-internet disaster zones
+- 🤖 AI-powered disaster prediction and early warning alerts
+- 🏫 Direct integration with government school systems across India
+- 📊 National disaster preparedness dashboard
+- 🌐 Multi-language support for regional languages
