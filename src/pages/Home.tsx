@@ -41,23 +41,36 @@ const Home = () => {
     <div className="app-container min-h-screen pb-20">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border sticky top-0 bg-background z-40">
+        
+        {/* Left — Back + Logo */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate("/")}
+            className="text-muted-foreground hover:text-foreground transition text-lg mr-1"
+          >
+            ←
+          </button>
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-sm">
             🛡️
           </div>
           <div>
             <span className="font-bold text-base">ResQverse</span>
             {userName && (
-              <p className="text-[10px] text-muted-foreground">Hi, {userName}! 👋</p>
+              <p className="text-[10px] text-muted-foreground">
+                Hi, {userName}! 👋
+              </p>
             )}
           </div>
         </div>
 
+        {/* Right — Login/Logout + SOS */}
         <div className="flex items-center gap-2">
-          {/* Login/Logout Button */}
           {userName ? (
             <button
-              onClick={() => { auth.signOut(); navigate("/"); }}
+              onClick={() => {
+                auth.signOut();
+                navigate("/");
+              }}
               className="text-xs text-muted-foreground hover:text-foreground transition bg-secondary px-3 py-1.5 rounded-lg"
             >
               Logout
